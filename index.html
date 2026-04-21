@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,35 +8,28 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --surface2: #222222;
-    --border: #2e2e2e;
-    --border2: #3a3a3a;
-    --text: #e8e4dc;
-    --text2: #8a8580;
-    --text3: #5a5550;
-    --accent: #c8f060;
-    --accent2: #8ab830;
-    --accent-dim: rgba(200,240,96,0.12);
-    --red: #e85050;
-    --mono: 'DM Mono', monospace;
-    --sans: 'DM Sans', sans-serif;
-    --radius: 10px;
-    --radius-sm: 6px;
+    --bg: #0f0f0f; --surface: #1a1a1a; --surface2: #222222;
+    --border: #2e2e2e; --border2: #3a3a3a;
+    --text: #e8e4dc; --text2: #8a8580; --text3: #5a5550;
+    --accent: #c8f060; --accent2: #8ab830; --accent-dim: rgba(200,240,96,0.12);
+    --red: #e85050; --mono: 'DM Mono', monospace; --sans: 'DM Sans', sans-serif;
+    --radius: 10px; --radius-sm: 6px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; }
   .screen { display: none; }
   .screen.active { display: block; }
+
+  /* GATE */
   .gate { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; text-align: center; gap: 1.5rem; }
   .gate-title { font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
   .gate-sub { font-size: 15px; color: var(--text2); max-width: 380px; line-height: 1.7; }
   .gate-sub strong { color: var(--text); font-weight: 500; }
   .gate-btn { padding: 12px 28px; border-radius: var(--radius-sm); font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; border: none; background: var(--accent); color: #0f0f0f; font-weight: 500; display: flex; align-items: center; gap: 8px; }
   .gate-btn:hover { background: var(--accent2); }
-  .gate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .gate-note { font-size: 12px; color: var(--text3); max-width: 340px; line-height: 1.6; }
+
+  /* SETUP */
   .setup-box { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 1rem; }
   .setup-box h3 { font-size: 14px; font-weight: 500; color: var(--text); }
   .setup-box p { font-size: 13px; color: var(--text2); line-height: 1.7; }
@@ -45,9 +39,10 @@
   .setup-btn-row { display: flex; gap: 8px; }
   .btn-primary { flex: 1; padding: 10px; border-radius: var(--radius-sm); font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; border: none; background: var(--accent); color: #0f0f0f; font-weight: 500; }
   .btn-primary:hover { background: var(--accent2); }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn-secondary { padding: 10px 16px; border-radius: var(--radius-sm); font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border2); background: transparent; color: var(--text2); }
   .btn-secondary:hover { color: var(--text); border-color: var(--text2); }
+
+  /* HEADER */
   .app-header { position: sticky; top: 0; z-index: 50; background: rgba(15,15,15,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem; height: 56px; }
   .app-title { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; flex: 1; }
   .sync-status { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.05em; }
@@ -61,6 +56,8 @@
   .view-tab:hover:not(.active) { color: var(--text); }
   .signout-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; padding: 5px 10px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
   .signout-btn:hover { color: var(--text); border-color: var(--text2); }
+
+  /* NAV */
   .nav-bar { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem 1rem; }
   .nav-label { font-size: 22px; font-weight: 300; letter-spacing: -0.02em; color: var(--text); }
   .nav-label span { color: var(--accent); font-weight: 600; }
@@ -68,6 +65,8 @@
   .nav-arrow { width: 34px; height: 34px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
   .nav-arrow:hover { border-color: var(--accent); color: var(--accent); }
   .main { padding: 0 1.5rem 2rem; }
+
+  /* CALENDAR */
   .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
   .cal-dow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); text-align: center; padding: 6px 0 8px; }
   .cal-cell { aspect-ratio: 1; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px; cursor: pointer; transition: border-color 0.15s, background 0.15s; display: flex; flex-direction: column; gap: 4px; min-height: 64px; }
@@ -80,6 +79,8 @@
   .cal-dots { display: flex; flex-wrap: wrap; gap: 2px; margin-top: auto; }
   .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border2); }
   .cal-dot.on { background: var(--accent); }
+
+  /* WEEK */
   .week-rows { display: flex; flex-direction: column; gap: 3px; }
   .week-row { display: grid; grid-template-columns: 90px 1fr; align-items: stretch; gap: 8px; }
   .week-label { display: flex; flex-direction: column; justify-content: center; padding: 12px 0; }
@@ -92,26 +93,47 @@
   .week-cell.today-cell { border-color: rgba(200,240,96,0.4); }
   .week-cell-content { font-size: 12px; color: var(--text2); font-family: var(--mono); }
   .week-cell-content.has { color: var(--text); }
+
+  /* MODAL */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; overflow-y: auto; padding: 2rem 1rem; align-items: flex-start; justify-content: center; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; width: 100%; max-width: 520px; margin: auto; }
+  .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; width: 100%; max-width: 560px; margin: auto; }
   .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
   .modal-date { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
   .modal-close { width: 28px; height: 28px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
   .modal-close:hover { color: var(--text); border-color: var(--text2); }
+
+  /* EXERCISE BLOCK */
   .ex-block { margin-bottom: 1.25rem; }
   .ex-block-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
   .ex-block-name::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-  .sets-table { display: flex; flex-direction: column; gap: 4px; }
-  .set-row { display: flex; align-items: center; gap: 8px; }
+  .sets-table { display: flex; flex-direction: column; gap: 6px; }
+
+  /* SET ROW */
+  .set-row { display: flex; flex-direction: column; gap: 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; }
+  .set-row-top { display: flex; align-items: center; gap: 8px; }
   .set-label { font-family: var(--mono); font-size: 11px; color: var(--text3); min-width: 44px; letter-spacing: 0.05em; }
-  .set-input { width: 72px; padding: 6px 10px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: var(--mono); font-size: 13px; text-align: center; transition: border-color 0.15s; outline: none; }
+  .set-input { width: 68px; padding: 5px 8px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: var(--mono); font-size: 13px; text-align: center; transition: border-color 0.15s; outline: none; }
   .set-input:focus { border-color: var(--accent); }
   .set-input::placeholder { color: var(--text3); }
   .set-unit { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+  .set-remove { margin-left: auto; width: 22px; height: 22px; border: 1px solid var(--border2); border-radius: 4px; background: transparent; color: var(--text3); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
+  .set-remove:hover { color: var(--red); border-color: var(--red); }
+
+  /* NOTES */
+  .set-notes { width: 100%; padding: 5px 8px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: var(--sans); font-size: 12px; outline: none; resize: none; transition: border-color 0.15s; line-height: 1.4; }
+  .set-notes:focus { border-color: var(--accent); }
+  .set-notes::placeholder { color: var(--text3); }
+
+  /* ADD SET BUTTON */
+  .add-set-btn { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px dashed var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text3); font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; cursor: pointer; transition: all 0.15s; margin-top: 2px; }
+  .add-set-btn:hover { border-color: var(--accent); color: var(--accent); }
+
   .divider { height: 1px; background: var(--border); margin: 0.75rem 0; }
   .modal-done { width: 100%; padding: 10px; background: var(--accent); border: none; border-radius: var(--radius-sm); color: #0f0f0f; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; margin-top: 0.5rem; transition: background 0.15s; }
   .modal-done:hover { background: var(--accent2); }
+
+  /* SUMMARY */
   .summary { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
   .summary-heading { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 1rem; }
   .ex-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
@@ -123,12 +145,17 @@
   .stat-card-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
   .stat-card-val { font-size: 24px; font-weight: 300; color: var(--text); line-height: 1; }
   .stat-card-unit { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 4px; }
+
+  /* LOADING */
   .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 1rem; }
   .loading-text { font-family: var(--mono); font-size: 12px; color: var(--text3); letter-spacing: 0.08em; }
   .spinner { width: 24px; height: 24px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* TOAST */
   .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 8px 16px; font-family: var(--mono); font-size: 11px; color: var(--text2); letter-spacing: 0.05em; z-index: 300; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; }
+
   @media (max-width: 480px) {
     .app-header { padding: 0 0.75rem; gap: 6px; }
     .app-title { display: none; }
@@ -139,23 +166,21 @@
     .cal-cell { min-height: 44px; padding: 4px; }
     .cal-dn { font-size: 10px; }
     .sync-status { display: none; }
+    .set-input { width: 58px; }
   }
 </style>
 </head>
 <body>
 
 <div class="screen active" id="screen-loading">
-  <div class="loading">
-    <div class="spinner"></div>
-    <div class="loading-text">loading...</div>
-  </div>
+  <div class="loading"><div class="spinner"></div><div class="loading-text">loading...</div></div>
 </div>
 
 <div class="screen" id="screen-gate">
   <div class="gate">
     <div class="gate-title">// Jim's Exercise Tracker</div>
     <div class="gate-sub">Sign in with your Google account to access your exercise data, synced across all your devices via Google Sheets.</div>
-    <button class="gate-btn" id="signin-btn" onclick="signIn()">
+    <button class="gate-btn" onclick="signIn()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -232,6 +257,7 @@ const TIMED    = ['Plank','Wall sit','Dead hang'];
 const ALL_EX   = [...WEIGHTED, ...TIMED];
 const DOW      = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
 let accessToken = null;
 let sheetId = localStorage.getItem(SHEET_ID_KEY);
 let data = {};
@@ -240,15 +266,19 @@ let cursor = new Date(); cursor.setHours(0,0,0,0);
 let summaryEx = WEIGHTED[0];
 let saveTimer = null;
 
+// Each day's data structure:
+// data[dayKey][exName] = [ {reps, weight, notes} ] for weighted
+// data[dayKey][exName] = [ {time, notes} ] for timed
+
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
 }
 
+// ── AUTH ─────────────────────────────────────────────────────
 function signIn() {
   const client = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID,
-    scope: SCOPES,
+    client_id: CLIENT_ID, scope: SCOPES,
     callback: async (resp) => {
       if (resp.error) { showToast('Sign in failed'); return; }
       accessToken = resp.access_token;
@@ -264,17 +294,15 @@ async function afterSignIn() {
     const ok = await loadSheetData();
     if (ok) { showScreen('app'); render(); }
     else { sheetId = null; localStorage.removeItem(SHEET_ID_KEY); showScreen('setup'); }
-  } else {
-    showScreen('setup');
-  }
+  } else { showScreen('setup'); }
 }
 
 function signOut() {
   if (accessToken) google.accounts.oauth2.revoke(accessToken);
-  accessToken = null; data = {};
-  showScreen('gate');
+  accessToken = null; data = {}; showScreen('gate');
 }
 
+// ── SHEET SETUP ──────────────────────────────────────────────
 async function createNewSheet() {
   showScreen('loading');
   try {
@@ -285,20 +313,15 @@ async function createNewSheet() {
     sheetId = res.spreadsheetId;
     localStorage.setItem(SHEET_ID_KEY, sheetId);
     await initSheetHeaders();
-    data = {};
-    showScreen('app'); render();
+    data = {}; showScreen('app'); render();
     showToast('Sheet created in your Google Drive!');
-  } catch(e) {
-    showToast('Could not create sheet — try again');
-    showScreen('setup');
-  }
+  } catch(e) { showToast('Could not create sheet — try again'); showScreen('setup'); }
 }
 
 async function useExistingSheet() {
   const id = document.getElementById('existing-sheet-id').value.trim();
   if (!id) { showToast('Please paste a Sheet ID'); return; }
-  sheetId = id;
-  localStorage.setItem(SHEET_ID_KEY, sheetId);
+  sheetId = id; localStorage.setItem(SHEET_ID_KEY, sheetId);
   showScreen('loading');
   const ok = await loadSheetData();
   if (ok) { showScreen('app'); render(); }
@@ -306,28 +329,27 @@ async function useExistingSheet() {
 }
 
 async function initSheetHeaders() {
-  await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}!A1:append?valueInputOption=RAW`, 'POST', { values: [buildHeaders()] });
+  await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}!A1:append?valueInputOption=RAW`, 'POST', {
+    values: [['date', 'exercise', 'set', 'reps_or_time', 'weight', 'notes']]
+  });
 }
 
-function buildHeaders() {
-  const h = ['date'];
-  WEIGHTED.forEach(ex => { for (let s=1;s<=3;s++) { h.push(`${ex}|s${s}|reps`); h.push(`${ex}|s${s}|weight`); } });
-  TIMED.forEach(ex => { for (let s=1;s<=4;s++) { h.push(`${ex}|s${s}|time`); } });
-  return h;
-}
-
+// ── DATA: new flat row format ─────────────────────────────────
+// Each set is its own row: date | exercise | set_number | reps_or_time | weight | notes
 async function loadSheetData() {
   try {
     const res = await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}`, 'GET');
     const rows = res.values || [];
     if (rows.length < 1) { await initSheetHeaders(); return true; }
-    const headers = rows[0];
     data = {};
-    for (let i=1; i<rows.length; i++) {
-      const row = rows[i], dateKey = row[0];
-      if (!dateKey) continue;
-      data[dateKey] = {};
-      headers.forEach((h,idx) => { if (h!=='date' && row[idx]) data[dateKey][h]=row[idx]; });
+    for (let i = 1; i < rows.length; i++) {
+      const [dateKey, exercise, setNum, repsOrTime, weight, notes] = rows[i];
+      if (!dateKey || !exercise) continue;
+      if (!data[dateKey]) data[dateKey] = {};
+      if (!data[dateKey][exercise]) data[dateKey][exercise] = [];
+      const idx = parseInt(setNum) - 1;
+      while (data[dateKey][exercise].length <= idx) data[dateKey][exercise].push({});
+      data[dateKey][exercise][idx] = { repsOrTime: repsOrTime||'', weight: weight||'', notes: notes||'' };
     }
     setSyncDot('synced'); setSyncLabel('synced');
     return true;
@@ -340,17 +362,27 @@ async function saveDay(dayKey) {
   try {
     const res = await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}`, 'GET');
     const rows = res.values || [];
-    const headers = rows.length > 0 ? rows[0] : buildHeaders();
     if (rows.length === 0) await initSheetHeaders();
-    const dd = data[dayKey] || {};
-    const rowData = headers.map(h => h==='date' ? dayKey : (dd[h]||''));
-    let rowIndex = -1;
-    for (let i=1; i<rows.length; i++) { if (rows[i][0]===dayKey) { rowIndex=i+1; break; } }
-    if (rowIndex > 0) {
-      await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}!A${rowIndex}?valueInputOption=RAW`, 'PUT', { values: [rowData] });
-    } else {
-      await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}!A1:append?valueInputOption=RAW`, 'POST', { values: [rowData] });
-    }
+
+    // Remove existing rows for this day
+    const rowsToKeep = rows.filter((r, i) => i === 0 || r[0] !== dayKey);
+
+    // Build new rows for this day
+    const dayData = data[dayKey] || {};
+    const newRows = [];
+    ALL_EX.forEach(ex => {
+      const sets = dayData[ex] || [];
+      sets.forEach((s, idx) => {
+        if (s.repsOrTime || s.weight || s.notes) {
+          newRows.push([dayKey, ex, idx+1, s.repsOrTime||'', s.weight||'', s.notes||'']);
+        }
+      });
+    });
+
+    const allRows = [...rowsToKeep, ...newRows];
+
+    // Clear and rewrite sheet
+    await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}!A1:Z10000?valueInputOption=RAW`, 'PUT', { values: allRows });
     setSyncDot('synced'); setSyncLabel('saved');
   } catch(e) { setSyncDot('error'); setSyncLabel('error'); showToast('Save failed — check connection'); }
 }
@@ -365,12 +397,17 @@ async function gapi(url, method, body) {
 
 function setSyncDot(state) { const d=document.getElementById('sync-dot'); d.className='sync-dot'; if(state) d.classList.add(state); }
 function setSyncLabel(txt) { document.getElementById('sync-label').textContent=txt; }
-function scheduleSave(dayKey) { setSyncDot('syncing'); setSyncLabel('saving…'); clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveDay(dayKey),800); }
-function dayKey(d) { return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
-function getDayData(d) { return data[dayKey(d)]||{}; }
-function hasData(d) { const dd=getDayData(d); return Object.values(dd).some(v=>v!==''&&v!=null); }
-function saveField(input) { const k=input.dataset.k,f=input.dataset.f,v=input.value; if(!data[k]) data[k]={}; data[k][f]=v; scheduleSave(k); }
+function scheduleSave(dayKey) { setSyncDot('syncing'); setSyncLabel('saving…'); clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveDay(dayKey),1000); }
 
+// ── DATA HELPERS ─────────────────────────────────────────────
+function dayKey(d) { return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function getDayData(d) { return data[dayKey(d)] || {}; }
+function hasData(d) {
+  const dd = getDayData(d);
+  return Object.values(dd).some(sets => sets.some(s => s.repsOrTime || s.weight || s.notes));
+}
+
+// ── VIEWS ────────────────────────────────────────────────────
 const today = new Date(); today.setHours(0,0,0,0);
 function isToday(d) { return d.toDateString()===today.toDateString(); }
 
@@ -410,7 +447,7 @@ function renderMonth() {
 
 function calCell(d,other) {
   const dd=getDayData(d);
-  let dots=ALL_EX.map(ex=>{ const on=Object.keys(dd).some(f=>f.startsWith(ex)&&dd[f]!==''); return `<div class="cal-dot ${on?'on':''}"></div>`; }).join('');
+  let dots=ALL_EX.map(ex=>{ const on=(dd[ex]||[]).some(s=>s.repsOrTime||s.weight); return `<div class="cal-dot ${on?'on':''}"></div>`; }).join('');
   const cls=['cal-cell',other?'other-month':'',isToday(d)?'today':'',hasData(d)?'has-data':''].filter(Boolean).join(' ');
   return `<div class="${cls}" onclick="openDayModal(new Date(${d.getTime()}))"><div class="cal-dn">${d.getDate()}</div><div class="cal-dots">${dots}</div></div>`;
 }
@@ -423,7 +460,7 @@ function renderWeek() {
   let html='<div class="week-rows">';
   for(let i=0;i<7;i++){
     const d=new Date(ws.getTime()+i*86400000), isTod=isToday(d), dd=getDayData(d);
-    const done=ALL_EX.filter(ex=>Object.keys(dd).some(f=>f.startsWith(ex)&&dd[f]!==''));
+    const done=ALL_EX.filter(ex=>(dd[ex]||[]).some(s=>s.repsOrTime||s.weight));
     const label=done.length?done.slice(0,5).join(', ')+(done.length>5?'…':''):'— tap to log';
     html+=`<div class="week-row"><div class="week-label ${isTod?'today':''}"><div class="wd">${DOW[d.getDay()]}</div><div class="wdate">${d.getDate()}</div></div><div class="week-cell ${isTod?'today-cell':''}" onclick="openDayModal(new Date(${d.getTime()}))"><div class="week-cell-content ${done.length?'has':''}">${label}</div></div></div>`;
   }
@@ -436,35 +473,122 @@ function renderDayNav() {
   document.getElementById('main-view').innerHTML='';
 }
 
+// ── MODAL ────────────────────────────────────────────────────
+let currentModalKey = null;
+
 function openDayModal(d) {
-  const k=dayKey(d), dd=data[k]||{};
-  let html=`<div class="modal-header"><div class="modal-date">${DOW[d.getDay()]} / ${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()} / ${d.getFullYear()}</div><button class="modal-close" onclick="closeModal()">&#x2715;</button></div>`;
-  WEIGHTED.forEach((ex,ei)=>{
-    html+=`<div class="ex-block"><div class="ex-block-name">${ex}</div><div class="sets-table">`;
-    for(let s=1;s<=3;s++){
-      const rk=`${ex}|s${s}|reps`,wk=`${ex}|s${s}|weight`;
-      html+=`<div class="set-row"><span class="set-label">set ${s}</span><input class="set-input" type="number" min="0" placeholder="reps" value="${dd[rk]||''}" data-k="${k}" data-f="${rk}" oninput="saveField(this)"><input class="set-input" type="number" min="0" step="0.5" placeholder="kg" value="${dd[wk]||''}" data-k="${k}" data-f="${wk}" oninput="saveField(this)"><span class="set-unit">reps / kg</span></div>`;
+  currentModalKey = dayKey(d);
+  if (!data[currentModalKey]) data[currentModalKey] = {};
+  // Ensure at least 1 set per exercise
+  ALL_EX.forEach(ex => {
+    if (!data[currentModalKey][ex] || data[currentModalKey][ex].length === 0) {
+      data[currentModalKey][ex] = [{ repsOrTime: '', weight: '', notes: '' }];
     }
-    html+='</div></div>';
-    if(ei<WEIGHTED.length-1) html+='<div class="divider"></div>';
   });
-  html+='<div class="divider"></div>';
-  TIMED.forEach((ex,ei)=>{
-    html+=`<div class="ex-block"><div class="ex-block-name">${ex}</div><div class="sets-table">`;
-    for(let s=1;s<=4;s++){
-      const tk=`${ex}|s${s}|time`;
-      html+=`<div class="set-row"><span class="set-label">set ${s}</span><input class="set-input" type="number" min="0" placeholder="sec" value="${dd[tk]||''}" data-k="${k}" data-f="${tk}" oninput="saveField(this)"><span class="set-unit">seconds</span></div>`;
-    }
-    html+='</div></div>';
-    if(ei<TIMED.length-1) html+='<div class="divider"></div>';
-  });
-  html+='<button class="modal-done" onclick="closeModal()">Save &amp; close</button>';
-  document.getElementById('modal-content').innerHTML=html;
+  renderModal(d);
   document.getElementById('modal-overlay').classList.add('open');
 }
 
-function overlayClick(e){ if(e.target===document.getElementById('modal-overlay')) closeModal(); }
-function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); render(); }
+function renderModal(d) {
+  const k = currentModalKey;
+  const dd = data[k];
+  let html = `<div class="modal-header"><div class="modal-date">${DOW[d.getDay()]} / ${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()} / ${d.getFullYear()}</div><button class="modal-close" onclick="closeModal()">&#x2715;</button></div>`;
+
+  WEIGHTED.forEach((ex, ei) => {
+    html += `<div class="ex-block"><div class="ex-block-name">${ex}</div><div class="sets-table" id="sets-${k}-${ex.replace(/\s/g,'_')}">`;
+    (dd[ex] || []).forEach((s, idx) => {
+      html += buildWeightedSetRow(k, ex, idx, s);
+    });
+    html += `</div><button class="add-set-btn" onclick="addSet('${k}','${ex}',false)">+ add set</button></div>`;
+    if (ei < WEIGHTED.length - 1) html += '<div class="divider"></div>';
+  });
+
+  html += '<div class="divider"></div>';
+
+  TIMED.forEach((ex, ei) => {
+    html += `<div class="ex-block"><div class="ex-block-name">${ex}</div><div class="sets-table" id="sets-${k}-${ex.replace(/\s/g,'_')}">`;
+    (dd[ex] || []).forEach((s, idx) => {
+      html += buildTimedSetRow(k, ex, idx, s);
+    });
+    html += `</div><button class="add-set-btn" onclick="addSet('${k}','${ex}',true)">+ add set</button></div>`;
+    if (ei < TIMED.length - 1) html += '<div class="divider"></div>';
+  });
+
+  html += '<button class="modal-done" onclick="closeModal()">Save &amp; close</button>';
+  document.getElementById('modal-content').innerHTML = html;
+  // Store d for re-render
+  document.getElementById('modal-content').dataset.ts = d.getTime();
+}
+
+function buildWeightedSetRow(k, ex, idx, s) {
+  const exId = ex.replace(/\s/g,'_');
+  return `<div class="set-row" id="setrow-${k}-${exId}-${idx}">
+    <div class="set-row-top">
+      <span class="set-label">set ${idx+1}</span>
+      <input class="set-input" type="number" min="0" placeholder="reps" value="${s.repsOrTime||''}"
+        oninput="updateSet('${k}','${ex}',${idx},'repsOrTime',this.value)">
+      <input class="set-input" type="number" min="0" step="0.5" placeholder="kg" value="${s.weight||''}"
+        oninput="updateSet('${k}','${ex}',${idx},'weight',this.value)">
+      <span class="set-unit">reps / kg</span>
+      <button class="set-remove" onclick="removeSet('${k}','${ex}',${idx})" title="Remove set">&#x2212;</button>
+    </div>
+    <textarea class="set-notes" rows="1" placeholder="Notes — how did it feel? e.g. easy, left knee tight, PB..."
+      oninput="updateSet('${k}','${ex}',${idx},'notes',this.value)">${s.notes||''}</textarea>
+  </div>`;
+}
+
+function buildTimedSetRow(k, ex, idx, s) {
+  const exId = ex.replace(/\s/g,'_');
+  return `<div class="set-row" id="setrow-${k}-${exId}-${idx}">
+    <div class="set-row-top">
+      <span class="set-label">set ${idx+1}</span>
+      <input class="set-input" type="number" min="0" placeholder="sec" value="${s.repsOrTime||''}"
+        oninput="updateSet('${k}','${ex}',${idx},'repsOrTime',this.value)">
+      <span class="set-unit">seconds</span>
+      <button class="set-remove" onclick="removeSet('${k}','${ex}',${idx})" title="Remove set">&#x2212;</button>
+    </div>
+    <textarea class="set-notes" rows="1" placeholder="Notes — how did it feel?"
+      oninput="updateSet('${k}','${ex}',${idx},'notes',this.value)">${s.notes||''}</textarea>
+  </div>`;
+}
+
+function updateSet(dayKey, ex, idx, field, value) {
+  if (!data[dayKey]) data[dayKey] = {};
+  if (!data[dayKey][ex]) data[dayKey][ex] = [];
+  while (data[dayKey][ex].length <= idx) data[dayKey][ex].push({ repsOrTime:'', weight:'', notes:'' });
+  data[dayKey][ex][idx][field] = value;
+  scheduleSave(dayKey);
+}
+
+function addSet(dayKey, ex, isTimed) {
+  if (!data[dayKey]) data[dayKey] = {};
+  if (!data[dayKey][ex]) data[dayKey][ex] = [];
+  data[dayKey][ex].push({ repsOrTime: '', weight: '', notes: '' });
+  const idx = data[dayKey][ex].length - 1;
+  const exId = ex.replace(/\s/g,'_');
+  const container = document.getElementById(`sets-${dayKey}-${exId}`);
+  if (container) {
+    const newRow = document.createElement('div');
+    newRow.innerHTML = isTimed ? buildTimedSetRow(dayKey, ex, idx, {}) : buildWeightedSetRow(dayKey, ex, idx, {});
+    container.appendChild(newRow.firstElementChild);
+  }
+  scheduleSave(dayKey);
+}
+
+function removeSet(dayKey, ex, idx) {
+  if (!data[dayKey] || !data[dayKey][ex]) return;
+  if (data[dayKey][ex].length <= 1) { showToast('Need at least 1 set'); return; }
+  data[dayKey][ex].splice(idx, 1);
+  // Re-render modal
+  const ts = document.getElementById('modal-content').dataset.ts;
+  renderModal(new Date(parseInt(ts)));
+  scheduleSave(dayKey);
+}
+
+function overlayClick(e) { if(e.target===document.getElementById('modal-overlay')) closeModal(); }
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); currentModalKey=null; render(); }
+
+// ── SUMMARY ──────────────────────────────────────────────────
 function weekStart(d){ const ws=new Date(d); ws.setDate(ws.getDate()-ws.getDay()); ws.setHours(0,0,0,0); return ws; }
 function weekDays(d){ const ws=weekStart(d); return Array.from({length:7},(_,i)=>new Date(ws.getTime()+i*86400000)); }
 
@@ -475,27 +599,30 @@ function renderSummary(){
   let cards='';
   if(!isTimed){
     let totalReps=0,totalVol=0,bestW=0;
-    days.forEach(d=>{ const dd=getDayData(d); for(let s=1;s<=3;s++){ const r=parseFloat(dd[`${ex}|s${s}|reps`])||0,w=parseFloat(dd[`${ex}|s${s}|weight`])||0; totalReps+=r; totalVol+=r*w; if(w>bestW) bestW=w; } });
+    days.forEach(d=>{
+      const sets=(getDayData(d)[ex]||[]);
+      sets.forEach(s=>{ const r=parseFloat(s.repsOrTime)||0, w=parseFloat(s.weight)||0; totalReps+=r; totalVol+=r*w; if(w>bestW) bestW=w; });
+    });
     cards+=sCard('Total reps',totalReps,'this week')+sCard('Volume',Math.round(totalVol),'kg this week')+sCard('Best weight',bestW,'kg lifted');
   } else {
     let totalTime=0,bestSet=0,totalSets=0;
-    days.forEach(d=>{ const dd=getDayData(d); for(let s=1;s<=4;s++){ const t=parseFloat(dd[`${ex}|s${s}|time`])||0; if(t>0){totalTime+=t;totalSets++;if(t>bestSet)bestSet=t;} } });
+    days.forEach(d=>{
+      const sets=(getDayData(d)[ex]||[]);
+      sets.forEach(s=>{ const t=parseFloat(s.repsOrTime)||0; if(t>0){totalTime+=t;totalSets++;if(t>bestSet)bestSet=t;} });
+    });
     cards+=sCard('Total time',totalTime,'sec this week')+sCard('Best set',bestSet,'seconds')+sCard('Sets logged',totalSets,'this week');
   }
   document.getElementById('stat-cards').innerHTML=cards;
 }
 
-function sCard(label,val,unit){ return `<div class="stat-card"><div class="stat-card-label">${label}</div><div class="stat-card-val">${val}</div><div class="stat-card-unit">${unit}</div></div>`; }
+function sCard(l,v,u){ return `<div class="stat-card"><div class="stat-card-label">${l}</div><div class="stat-card-val">${v}</div><div class="stat-card-unit">${u}</div></div>`; }
 function setSummaryEx(ex){ summaryEx=ex; renderSummary(); }
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
 window.addEventListener('load', () => {
   setTimeout(() => {
-    if (typeof google !== 'undefined' && google.accounts) {
-      showScreen('gate');
-    } else {
-      document.querySelector('.loading-text').textContent = 'failed to load Google — check connection';
-    }
+    if (typeof google !== 'undefined' && google.accounts) { showScreen('gate'); }
+    else { document.querySelector('.loading-text').textContent = 'failed to load Google — check connection'; }
   }, 1000);
 });
 </script>
