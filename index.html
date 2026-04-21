@@ -12,8 +12,10 @@
     --border: #2e2e2e; --border2: #3a3a3a;
     --text: #e8e4dc; --text2: #8a8580; --text3: #5a5550;
     --accent: #c8f060; --accent2: #8ab830; --accent-dim: rgba(200,240,96,0.12);
-    --red: #e85050; --mono: 'DM Mono', monospace; --sans: 'DM Sans', sans-serif;
+    --red: #e85050; --blue: #378ADD; --blue-dim: rgba(55,138,221,0.12);
+    --mono: 'DM Mono', monospace; --sans: 'DM Sans', sans-serif;
     --radius: 10px; --radius-sm: 6px;
+    --panel-width: 340px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; }
@@ -24,12 +26,9 @@
   .gate { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; text-align: center; gap: 1.5rem; }
   .gate-title { font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
   .gate-sub { font-size: 15px; color: var(--text2); max-width: 380px; line-height: 1.7; }
-  .gate-sub strong { color: var(--text); font-weight: 500; }
   .gate-btn { padding: 12px 28px; border-radius: var(--radius-sm); font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; border: none; background: var(--accent); color: #0f0f0f; font-weight: 500; display: flex; align-items: center; gap: 8px; }
   .gate-btn:hover { background: var(--accent2); }
   .gate-note { font-size: 12px; color: var(--text3); max-width: 340px; line-height: 1.6; }
-
-  /* SETUP */
   .setup-box { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 1rem; }
   .setup-box h3 { font-size: 14px; font-weight: 500; color: var(--text); }
   .setup-box p { font-size: 13px; color: var(--text2); line-height: 1.7; }
@@ -42,6 +41,11 @@
   .btn-secondary { padding: 10px 16px; border-radius: var(--radius-sm); font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border2); background: transparent; color: var(--text2); }
   .btn-secondary:hover { color: var(--text); border-color: var(--text2); }
 
+  /* APP LAYOUT */
+  .app-layout { display: flex; flex-direction: column; min-height: 100vh; }
+  .app-body { display: flex; flex: 1; overflow: hidden; }
+  .app-main { flex: 1; overflow-y: auto; min-width: 0; }
+
   /* HEADER */
   .app-header { position: sticky; top: 0; z-index: 50; background: rgba(15,15,15,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem; height: 56px; }
   .app-title { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; color: var(--accent); text-transform: uppercase; flex: 1; }
@@ -50,12 +54,13 @@
   .sync-dot.synced { background: var(--accent); }
   .sync-dot.syncing { background: #f0c060; }
   .sync-dot.error { background: var(--red); }
+  .header-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; padding: 5px 10px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .header-btn:hover { color: var(--text); border-color: var(--text2); }
+  .header-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
   .view-tabs { display: flex; gap: 2px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px; }
   .view-tab { font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; padding: 5px 14px; border-radius: 4px; border: none; background: transparent; color: var(--text2); cursor: pointer; transition: all 0.15s; }
   .view-tab.active { background: var(--accent); color: #0f0f0f; font-weight: 500; }
   .view-tab:hover:not(.active) { color: var(--text); }
-  .signout-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; padding: 5px 10px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-  .signout-btn:hover { color: var(--text); border-color: var(--text2); }
 
   /* NAV */
   .nav-bar { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem 1rem; }
@@ -74,11 +79,13 @@
   .cal-cell.today { border-color: var(--accent); }
   .cal-cell.other-month { opacity: 0.35; }
   .cal-cell.has-data { background: var(--surface); }
+  .cal-cell.has-plan { background: var(--surface); border-color: var(--blue); }
   .cal-dn { font-family: var(--mono); font-size: 11px; color: var(--text2); font-weight: 500; }
   .cal-cell.today .cal-dn { color: var(--accent); }
   .cal-dots { display: flex; flex-wrap: wrap; gap: 2px; margin-top: auto; }
   .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border2); }
   .cal-dot.on { background: var(--accent); }
+  .cal-dot.planned { background: var(--blue); }
 
   /* WEEK */
   .week-rows { display: flex; flex-direction: column; gap: 3px; }
@@ -91,8 +98,10 @@
   .week-cell { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s; min-height: 52px; display: flex; align-items: center; }
   .week-cell:hover { border-color: var(--border2); background: var(--surface); }
   .week-cell.today-cell { border-color: rgba(200,240,96,0.4); }
+  .week-cell.planned-cell { border-color: rgba(55,138,221,0.4); }
   .week-cell-content { font-size: 12px; color: var(--text2); font-family: var(--mono); }
   .week-cell-content.has { color: var(--text); }
+  .week-cell-content.planned { color: var(--blue); }
 
   /* MODAL */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; overflow-y: auto; padding: 2rem 1rem; align-items: flex-start; justify-content: center; }
@@ -100,16 +109,20 @@
   .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; width: 100%; max-width: 560px; margin: auto; }
   .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
   .modal-date { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
-  .modal-close { width: 28px; height: 28px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-  .modal-close:hover { color: var(--text); border-color: var(--text2); }
+  .modal-date.planned-date { color: var(--blue); }
+  .modal-close { width: 28px; height: 28px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .modal-close:hover { color: var(--text); }
+  .modal-tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; }
+  .modal-tab { font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; padding: 5px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; transition: all 0.15s; }
+  .modal-tab.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+  .modal-tab.planned-tab.active { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
 
-  /* EXERCISE BLOCK */
+  /* EXERCISE BLOCKS */
   .ex-block { margin-bottom: 1.25rem; }
   .ex-block-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
   .ex-block-name::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .ex-block-name.planned-ex::before { background: var(--blue); }
   .sets-table { display: flex; flex-direction: column; gap: 6px; }
-
-  /* SET ROW */
   .set-row { display: flex; flex-direction: column; gap: 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; }
   .set-row-top { display: flex; align-items: center; gap: 8px; }
   .set-label { font-family: var(--mono); font-size: 11px; color: var(--text3); min-width: 44px; letter-spacing: 0.05em; }
@@ -117,21 +130,18 @@
   .set-input:focus { border-color: var(--accent); }
   .set-input::placeholder { color: var(--text3); }
   .set-unit { font-size: 11px; color: var(--text3); font-family: var(--mono); }
-  .set-remove { margin-left: auto; width: 22px; height: 22px; border: 1px solid var(--border2); border-radius: 4px; background: transparent; color: var(--text3); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
+  .set-remove { margin-left: auto; width: 22px; height: 22px; border: 1px solid var(--border2); border-radius: 4px; background: transparent; color: var(--text3); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .set-remove:hover { color: var(--red); border-color: var(--red); }
-
-  /* NOTES */
   .set-notes { width: 100%; padding: 5px 8px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: var(--sans); font-size: 12px; outline: none; resize: none; transition: border-color 0.15s; line-height: 1.4; }
   .set-notes:focus { border-color: var(--accent); }
   .set-notes::placeholder { color: var(--text3); }
-
-  /* ADD SET BUTTON */
   .add-set-btn { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px dashed var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text3); font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; cursor: pointer; transition: all 0.15s; margin-top: 2px; }
   .add-set-btn:hover { border-color: var(--accent); color: var(--accent); }
-
   .divider { height: 1px; background: var(--border); margin: 0.75rem 0; }
   .modal-done { width: 100%; padding: 10px; background: var(--accent); border: none; border-radius: var(--radius-sm); color: #0f0f0f; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; margin-top: 0.5rem; transition: background 0.15s; }
   .modal-done:hover { background: var(--accent2); }
+  .modal-clear { width: 100%; padding: 8px; background: transparent; border: 1px solid var(--red); border-radius: var(--radius-sm); color: var(--red); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; margin-top: 6px; transition: all 0.15s; }
+  .modal-clear:hover { background: rgba(232,80,80,0.1); }
 
   /* SUMMARY */
   .summary { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
@@ -139,12 +149,72 @@
   .ex-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
   .ex-pill { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; padding: 5px 12px; border: 1px solid var(--border2); border-radius: 20px; background: transparent; color: var(--text2); cursor: pointer; transition: all 0.15s; }
   .ex-pill.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
-  .ex-pill:hover:not(.active) { color: var(--text); }
   .stat-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
   .stat-card-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
   .stat-card-val { font-size: 24px; font-weight: 300; color: var(--text); line-height: 1; }
   .stat-card-unit { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 4px; }
+
+  /* AI COACH PANEL */
+  .ai-panel {
+    width: var(--panel-width); min-width: var(--panel-width);
+    background: var(--surface); border-left: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .ai-panel.collapsed { width: 0; min-width: 0; overflow: hidden; border-left: none; }
+  .ai-panel-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .ai-panel-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); flex: 1; }
+  .ai-panel-close { width: 24px; height: 24px; border: 1px solid var(--border2); border-radius: 4px; background: transparent; color: var(--text3); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .ai-panel-close:hover { color: var(--text); }
+  .ai-messages { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 12px; }
+  .ai-msg { display: flex; flex-direction: column; gap: 4px; }
+  .ai-msg-role { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .ai-msg.user .ai-msg-role { color: var(--text3); text-align: right; }
+  .ai-msg.assistant .ai-msg-role { color: var(--accent); }
+  .ai-msg-text { font-size: 13px; line-height: 1.6; color: var(--text2); background: var(--surface2); border-radius: var(--radius-sm); padding: 10px 12px; border: 1px solid var(--border); }
+  .ai-msg.user .ai-msg-text { background: var(--bg); color: var(--text); text-align: right; border-color: var(--border2); }
+  .ai-msg.assistant .ai-msg-text { border-color: var(--border); }
+  .ai-msg.thinking .ai-msg-text { color: var(--text3); font-style: italic; }
+
+  /* CONFIRM PLAN BUTTON */
+  .ai-confirm-btn { display: block; width: 100%; margin-top: 8px; padding: 8px 12px; background: var(--blue-dim); border: 1px solid var(--blue); border-radius: var(--radius-sm); color: var(--blue); font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: all 0.15s; text-align: center; }
+  .ai-confirm-btn:hover { background: rgba(55,138,221,0.2); }
+
+  .ai-input-area { padding: 1rem; border-top: 1px solid var(--border); flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+  .ai-input-row { display: flex; gap: 8px; }
+  .ai-input { flex: 1; padding: 8px 12px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: var(--sans); font-size: 13px; outline: none; resize: none; line-height: 1.4; }
+  .ai-input:focus { border-color: var(--accent); }
+  .ai-input::placeholder { color: var(--text3); }
+  .ai-send { padding: 8px 14px; background: var(--accent); border: none; border-radius: var(--radius-sm); color: #0f0f0f; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.05em; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+  .ai-send:hover { background: var(--accent2); }
+  .ai-send:disabled { opacity: 0.5; cursor: not-allowed; }
+  .ai-key-row { display: flex; gap: 6px; align-items: center; }
+  .ai-key-input { flex: 1; padding: 6px 10px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: var(--mono); font-size: 11px; outline: none; }
+  .ai-key-input:focus { border-color: var(--accent); }
+  .ai-key-input::placeholder { color: var(--text3); }
+  .ai-key-save { padding: 6px 12px; background: transparent; border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text2); font-family: var(--mono); font-size: 10px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .ai-key-save:hover { color: var(--text); border-color: var(--text2); }
+  .ai-key-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.05em; }
+
+  /* SETTINGS MODAL */
+  .settings-modal { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; width: 100%; max-width: 480px; margin: auto; }
+  .settings-title { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; }
+  .ex-manage-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; max-height: 300px; overflow-y: auto; }
+  .ex-manage-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  .ex-manage-name { flex: 1; font-size: 13px; color: var(--text); }
+  .ex-manage-type { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.05em; }
+  .ex-manage-del { width: 22px; height: 22px; border: 1px solid var(--border2); border-radius: 4px; background: transparent; color: var(--text3); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .ex-manage-del:hover { color: var(--red); border-color: var(--red); }
+  .ex-manage-del:disabled { opacity: 0.3; cursor: not-allowed; }
+  .add-ex-row { display: flex; gap: 8px; align-items: center; }
+  .add-ex-input { flex: 1; padding: 8px 10px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; outline: none; }
+  .add-ex-input:focus { border-color: var(--accent); }
+  .add-ex-input::placeholder { color: var(--text3); }
+  .add-ex-select { padding: 8px 10px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-family: var(--mono); font-size: 12px; outline: none; cursor: pointer; }
+  .add-ex-btn { padding: 8px 14px; background: var(--accent); border: none; border-radius: var(--radius-sm); color: #0f0f0f; font-family: var(--mono); font-size: 11px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+  .add-ex-btn:hover { background: var(--accent2); }
 
   /* LOADING */
   .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 1rem; }
@@ -156,8 +226,9 @@
   .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 8px 16px; font-family: var(--mono); font-size: 11px; color: var(--text2); letter-spacing: 0.05em; z-index: 300; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; }
 
-  @media (max-width: 480px) {
-    .app-header { padding: 0 0.75rem; gap: 6px; }
+  @media (max-width: 768px) {
+    .ai-panel { position: fixed; right: 0; top: 56px; bottom: 0; z-index: 100; }
+    .ai-panel.collapsed { width: 0; min-width: 0; }
     .app-title { display: none; }
     .main { padding: 0 0.75rem 2rem; }
     .nav-bar { padding: 1rem 0.75rem 0.75rem; }
@@ -166,7 +237,6 @@
     .cal-cell { min-height: 44px; padding: 4px; }
     .cal-dn { font-size: 10px; }
     .sync-status { display: none; }
-    .set-input { width: 58px; }
   }
 </style>
 </head>
@@ -189,7 +259,7 @@
       </svg>
       Sign in with Google
     </button>
-    <div class="gate-note">Your data is stored in a Google Sheet in your own Google Drive. This app never sees your password.</div>
+    <div class="gate-note">Your data lives in your own Google Sheet. This app never sees your password.</div>
   </div>
 </div>
 
@@ -198,7 +268,7 @@
     <div class="gate-title">// Setup</div>
     <div class="setup-box">
       <h3>Connect your data sheet</h3>
-      <p>The app needs a Google Sheet to store your exercise data. You can create a new one automatically, or paste the ID of an existing one.</p>
+      <p>Create a new Google Sheet automatically, or connect an existing one.</p>
       <button class="btn-primary" onclick="createNewSheet()">Create new sheet automatically</button>
       <div style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.05em;">— or —</div>
       <input class="setup-input" id="existing-sheet-id" placeholder="Paste existing Sheet ID here" />
@@ -211,65 +281,151 @@
 </div>
 
 <div class="screen" id="screen-app">
-  <header class="app-header">
-    <div class="app-title">// Exercise Log</div>
-    <div class="sync-status">
-      <div class="sync-dot" id="sync-dot"></div>
-      <span id="sync-label">ready</span>
-    </div>
-    <button class="signout-btn" onclick="signOut()">sign out</button>
-    <div class="view-tabs">
-      <button class="view-tab active" onclick="setView('month')">Month</button>
-      <button class="view-tab" onclick="setView('week')">Week</button>
-      <button class="view-tab" onclick="setView('day')">Day</button>
-    </div>
-  </header>
-  <div class="nav-bar">
-    <div class="nav-label" id="nav-label"></div>
-    <div class="nav-arrows">
-      <button class="nav-arrow" onclick="navPrev()">&#8592;</button>
-      <button class="nav-arrow" onclick="navNext()">&#8594;</button>
-    </div>
-  </div>
-  <div class="main">
-    <div id="main-view"></div>
-    <div class="summary">
-      <div class="summary-heading">Weekly summary</div>
-      <div class="ex-pills" id="ex-pills"></div>
-      <div class="stat-cards" id="stat-cards"></div>
+  <div class="app-layout">
+    <header class="app-header">
+      <div class="app-title">// Exercise Log</div>
+      <div class="sync-status">
+        <div class="sync-dot" id="sync-dot"></div>
+        <span id="sync-label">ready</span>
+      </div>
+      <button class="header-btn" onclick="openSettings()">exercises</button>
+      <button class="header-btn" onclick="signOut()">sign out</button>
+      <button class="header-btn" id="ai-toggle-btn" onclick="toggleAIPanel()">&#127947; coach</button>
+      <div class="view-tabs">
+        <button class="view-tab active" onclick="setView('month')">Month</button>
+        <button class="view-tab" onclick="setView('week')">Week</button>
+        <button class="view-tab" onclick="setView('day')">Day</button>
+      </div>
+    </header>
+
+    <div class="app-body">
+      <div class="app-main">
+        <div class="nav-bar">
+          <div class="nav-label" id="nav-label"></div>
+          <div class="nav-arrows">
+            <button class="nav-arrow" onclick="navPrev()">&#8592;</button>
+            <button class="nav-arrow" onclick="navNext()">&#8594;</button>
+          </div>
+        </div>
+        <div class="main">
+          <div id="main-view"></div>
+          <div class="summary">
+            <div class="summary-heading">Weekly summary</div>
+            <div class="ex-pills" id="ex-pills"></div>
+            <div class="stat-cards" id="stat-cards"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI COACH PANEL -->
+      <div class="ai-panel collapsed" id="ai-panel">
+        <div class="ai-panel-header">
+          <div class="ai-panel-title">&#127947; AI Coach</div>
+          <button class="ai-panel-close" onclick="toggleAIPanel()">&#x2715;</button>
+        </div>
+        <div class="ai-messages" id="ai-messages">
+          <div class="ai-msg assistant">
+            <div class="ai-msg-role">coach</div>
+            <div class="ai-msg-text">Hi Jim! I'm your AI training coach. I have full access to your exercise history and notes.<br><br>You can ask me things like:<br>• "How has my squat progressed?"<br>• "Plan my next 2 weeks"<br>• "Should I increase my SLDL weight?"<br>• "I'm feeling tired — what should I modify?"<br><br>Once you're happy with a plan I propose, click <strong>Confirm</strong> and I'll add it to your calendar.</div>
+          </div>
+          <div class="ai-msg assistant" id="ai-key-instructions">
+            <div class="ai-msg-role">setup</div>
+            <div class="ai-msg-text" style="border-color: #f0c060; color: var(--text);">
+              <strong>One-time setup required:</strong><br><br>
+              To activate the coach you need a free Anthropic API key:<br><br>
+              1. Go to <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a><br>
+              2. Sign up or sign in<br>
+              3. Click <strong>API Keys</strong> in the left menu<br>
+              4. Click <strong>Create Key</strong> and copy it<br>
+              5. Paste it in the field below and click <strong>Save</strong><br><br>
+              Your key is saved locally in your browser and never shared with anyone. You only need to do this once per device.
+            </div>
+          </div>
+        </div>
+        <div class="ai-input-area">
+          <div class="ai-key-row" id="ai-key-row">
+            <input class="ai-key-input" id="ai-key-input" type="password" placeholder="Paste Anthropic API key here (sk-ant-...)" />
+            <button class="ai-key-save" onclick="saveApiKey()">Save</button>
+          </div>
+          <div class="ai-input-row">
+            <textarea class="ai-input" id="ai-input" rows="2" placeholder="Ask your coach..."></textarea>
+            <button class="ai-send" id="ai-send-btn" onclick="sendMessage()">send</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- DAY MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="overlayClick(event)">
   <div class="modal" id="modal-content"></div>
 </div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settings-overlay" onclick="settingsOverlayClick(event)">
+  <div class="settings-modal" id="settings-content"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://accounts.google.com/gsi/client"></script>
 <script>
+// ── CONFIG ───────────────────────────────────────────────────
 const CLIENT_ID = '688992356709-l1qkvk7tohg4ibs001cec1g0ddll3dl6.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file';
 const SHEET_ID_KEY = 'exercise_sheet_id';
 const SHEET_NAME = 'ExerciseData';
-const WEIGHTED = ['Squat','Push up','Chin-up','SLDL','DB shoulder press','Bent over row'];
-const TIMED    = ['Plank','Wall sit','Dead hang'];
-const ALL_EX   = [...WEIGHTED, ...TIMED];
-const DOW      = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const MONTHS   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const PLAN_SHEET = 'PlannedSessions';
+const EX_SHEET = 'Exercises';
+const API_KEY_STORAGE = 'anthropic_api_key';
 
+// ── DEFAULT EXERCISES ────────────────────────────────────────
+const DEFAULT_WEIGHTED = ['Squat','Push up','Chin-up','SLDL','DB shoulder press','Bent over row'];
+const DEFAULT_TIMED    = ['Plank','Wall sit','Dead hang'];
+
+// ── STATE ────────────────────────────────────────────────────
 let accessToken = null;
 let sheetId = localStorage.getItem(SHEET_ID_KEY);
-let data = {};
+let data = {};        // logged data: data[dayKey][exName] = [{repsOrTime,weight,notes}]
+let planData = {};    // planned data: planData[dayKey][exName] = [{repsOrTime,weight,notes}]
+let exercises = [];   // [{name, type:'weighted'|'timed'}]
 let view = 'month';
 let cursor = new Date(); cursor.setHours(0,0,0,0);
-let summaryEx = WEIGHTED[0];
+let summaryEx = DEFAULT_WEIGHTED[0];
 let saveTimer = null;
+let currentModalKey = null;
+let aiPanelOpen = false;
+let chatHistory = [];
+let pendingPlan = null; // stores a plan awaiting confirmation
 
-// Each day's data structure:
-// data[dayKey][exName] = [ {reps, weight, notes} ] for weighted
-// data[dayKey][exName] = [ {time, notes} ] for timed
+// USER PROFILE — baked in for AI context
+const USER_PROFILE = `
+User profile:
+- Name: Jim
+- Age: 51
+- Weight: 89kg
+- Height: 190cm
+- Resting heart rate: 51 bpm
+- Low cholesterol
+- Good functional fitness (effortless stair climbing, long hikes)
+- Oura VO2max estimate: 39 (likely underestimated given RHR)
 
+Current programme (rolling 3+1):
+Day 1: Squat 4x20 @16kg vest, Bent over row 4x20 @40kg, Plank 4x60sec
+Day 2: Push-up 4x20 @16kg vest (yoga blocks), SLDL 4x20 @40kg, Dead hang 4x60sec
+Day 3: Chin-up 4x8 alternating grip, DB Shoulder press 4x15 @15kg each, Wall sit 4x60sec
+Day 4: Rest
+
+Recent programme update: Adding 1 heavy set of 8 reps before endurance sets:
+- Squat: 1x8 @60-70kg + 4x20 @vest
+- SLDL: 1x8 @60kg + 4x20 @40kg
+- Bent over row: 1x8 @60-70kg + 4x20 @40kg
+
+Equipment: Olympic bar + plates (up to 90kg), 2x kettlebells, 16kg weight vest, yoga blocks, pull-up bar, 50-step staircase (4 floors).
+`.trim();
+
+// ── SCREENS ──────────────────────────────────────────────────
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
@@ -291,15 +447,16 @@ function signIn() {
 async function afterSignIn() {
   if (sheetId) {
     showScreen('loading');
-    const ok = await loadSheetData();
-    if (ok) { showScreen('app'); render(); }
+    const ok = await loadAllData();
+    if (ok) { showScreen('app'); render(); initAIPanel(); }
     else { sheetId = null; localStorage.removeItem(SHEET_ID_KEY); showScreen('setup'); }
   } else { showScreen('setup'); }
 }
 
 function signOut() {
   if (accessToken) google.accounts.oauth2.revoke(accessToken);
-  accessToken = null; data = {}; showScreen('gate');
+  accessToken = null; data = {}; planData = {}; exercises = [];
+  showScreen('gate');
 }
 
 // ── SHEET SETUP ──────────────────────────────────────────────
@@ -308,14 +465,21 @@ async function createNewSheet() {
   try {
     const res = await gapi('https://sheets.googleapis.com/v4/spreadsheets', 'POST', {
       properties: { title: "Jim's Exercise Tracker" },
-      sheets: [{ properties: { title: SHEET_NAME } }]
+      sheets: [
+        { properties: { title: SHEET_NAME } },
+        { properties: { title: PLAN_SHEET } },
+        { properties: { title: EX_SHEET } }
+      ]
     });
     sheetId = res.spreadsheetId;
     localStorage.setItem(SHEET_ID_KEY, sheetId);
-    await initSheetHeaders();
-    data = {}; showScreen('app'); render();
+    await initAllHeaders();
+    exercises = getDefaultExercises();
+    await saveExercises();
+    data = {}; planData = {};
+    showScreen('app'); render(); initAIPanel();
     showToast('Sheet created in your Google Drive!');
-  } catch(e) { showToast('Could not create sheet — try again'); showScreen('setup'); }
+  } catch(e) { console.error(e); showToast('Could not create sheet — try again'); showScreen('setup'); }
 }
 
 async function useExistingSheet() {
@@ -323,68 +487,105 @@ async function useExistingSheet() {
   if (!id) { showToast('Please paste a Sheet ID'); return; }
   sheetId = id; localStorage.setItem(SHEET_ID_KEY, sheetId);
   showScreen('loading');
-  const ok = await loadSheetData();
-  if (ok) { showScreen('app'); render(); }
+  const ok = await loadAllData();
+  if (ok) { showScreen('app'); render(); initAIPanel(); }
   else { showToast('Could not access that sheet'); showScreen('setup'); }
 }
 
-async function initSheetHeaders() {
-  await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}!A1:append?valueInputOption=RAW`, 'POST', {
-    values: [['date', 'exercise', 'set', 'reps_or_time', 'weight', 'notes']]
-  });
+async function initAllHeaders() {
+  await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}!A1:append?valueInputOption=RAW`, 'POST', { values: [['date','exercise','set','reps_or_time','weight','notes']] });
+  await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${PLAN_SHEET}!A1:append?valueInputOption=RAW`, 'POST', { values: [['date','exercise','set','reps_or_time','weight','notes']] });
+  await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${EX_SHEET}!A1:append?valueInputOption=RAW`, 'POST', { values: [['name','type']] });
 }
 
-// ── DATA: new flat row format ─────────────────────────────────
-// Each set is its own row: date | exercise | set_number | reps_or_time | weight | notes
-async function loadSheetData() {
+function getDefaultExercises() {
+  return [
+    ...DEFAULT_WEIGHTED.map(n => ({ name: n, type: 'weighted' })),
+    ...DEFAULT_TIMED.map(n => ({ name: n, type: 'timed' }))
+  ];
+}
+
+// ── LOAD ALL DATA ─────────────────────────────────────────────
+async function loadAllData() {
   try {
-    const res = await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}`, 'GET');
-    const rows = res.values || [];
-    if (rows.length < 1) { await initSheetHeaders(); return true; }
-    data = {};
-    for (let i = 1; i < rows.length; i++) {
-      const [dateKey, exercise, setNum, repsOrTime, weight, notes] = rows[i];
-      if (!dateKey || !exercise) continue;
-      if (!data[dateKey]) data[dateKey] = {};
-      if (!data[dateKey][exercise]) data[dateKey][exercise] = [];
-      const idx = parseInt(setNum) - 1;
-      while (data[dateKey][exercise].length <= idx) data[dateKey][exercise].push({});
-      data[dateKey][exercise][idx] = { repsOrTime: repsOrTime||'', weight: weight||'', notes: notes||'' };
-    }
-    setSyncDot('synced'); setSyncLabel('synced');
+    await loadExercises();
+    await loadSheetData();
+    await loadPlanData();
     return true;
-  } catch(e) { return false; }
+  } catch(e) { console.error(e); return false; }
 }
 
-async function saveDay(dayKey) {
+async function loadExercises() {
+  try {
+    const res = await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${EX_SHEET}`, 'GET');
+    const rows = res.values || [];
+    if (rows.length <= 1) {
+      exercises = getDefaultExercises();
+      await saveExercises();
+    } else {
+      exercises = rows.slice(1).filter(r=>r[0]).map(r => ({ name: r[0], type: r[1]||'weighted' }));
+    }
+  } catch(e) { exercises = getDefaultExercises(); }
+}
+
+async function saveExercises() {
+  const rows = [['name','type'], ...exercises.map(e => [e.name, e.type])];
+  await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${EX_SHEET}!A1:Z1000?valueInputOption=RAW`, 'PUT', { values: rows });
+}
+
+async function loadSheetData() {
+  const res = await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}`, 'GET');
+  data = parseSessionRows(res.values || []);
+  setSyncDot('synced'); setSyncLabel('synced');
+}
+
+async function loadPlanData() {
+  try {
+    const res = await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${PLAN_SHEET}`, 'GET');
+    planData = parseSessionRows(res.values || []);
+  } catch(e) { planData = {}; }
+}
+
+function parseSessionRows(rows) {
+  const result = {};
+  for (let i = 1; i < rows.length; i++) {
+    const [dateKey, exercise, setNum, repsOrTime, weight, notes] = rows[i];
+    if (!dateKey || !exercise) continue;
+    if (!result[dateKey]) result[dateKey] = {};
+    if (!result[dateKey][exercise]) result[dateKey][exercise] = [];
+    const idx = parseInt(setNum) - 1;
+    while (result[dateKey][exercise].length <= idx) result[dateKey][exercise].push({});
+    result[dateKey][exercise][idx] = { repsOrTime: repsOrTime||'', weight: weight||'', notes: notes||'' };
+  }
+  return result;
+}
+
+async function saveDay(dayKey, isplan) {
   if (!sheetId || !accessToken) return;
   setSyncDot('syncing'); setSyncLabel('saving…');
+  const sheetName = isplan ? PLAN_SHEET : SHEET_NAME;
+  const store = isplan ? planData : data;
   try {
-    const res = await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}`, 'GET');
+    const res = await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}`, 'GET');
     const rows = res.values || [];
-    if (rows.length === 0) await initSheetHeaders();
-
-    // Remove existing rows for this day
+    if (rows.length === 0) {
+      await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:append?valueInputOption=RAW`, 'POST', { values: [['date','exercise','set','reps_or_time','weight','notes']] });
+    }
     const rowsToKeep = rows.filter((r, i) => i === 0 || r[0] !== dayKey);
-
-    // Build new rows for this day
-    const dayData = data[dayKey] || {};
+    const dayStore = store[dayKey] || {};
     const newRows = [];
-    ALL_EX.forEach(ex => {
-      const sets = dayData[ex] || [];
+    exercises.forEach(ex => {
+      const sets = dayStore[ex.name] || [];
       sets.forEach((s, idx) => {
         if (s.repsOrTime || s.weight || s.notes) {
-          newRows.push([dayKey, ex, idx+1, s.repsOrTime||'', s.weight||'', s.notes||'']);
+          newRows.push([dayKey, ex.name, idx+1, s.repsOrTime||'', s.weight||'', s.notes||'']);
         }
       });
     });
-
     const allRows = [...rowsToKeep, ...newRows];
-
-    // Clear and rewrite sheet
-    await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${SHEET_NAME}!A1:Z10000?valueInputOption=RAW`, 'PUT', { values: allRows });
+    await gapi(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!A1:Z10000?valueInputOption=RAW`, 'PUT', { values: allRows });
     setSyncDot('synced'); setSyncLabel('saved');
-  } catch(e) { setSyncDot('error'); setSyncLabel('error'); showToast('Save failed — check connection'); }
+  } catch(e) { setSyncDot('error'); setSyncLabel('error'); showToast('Save failed'); }
 }
 
 async function gapi(url, method, body) {
@@ -397,15 +598,21 @@ async function gapi(url, method, body) {
 
 function setSyncDot(state) { const d=document.getElementById('sync-dot'); d.className='sync-dot'; if(state) d.classList.add(state); }
 function setSyncLabel(txt) { document.getElementById('sync-label').textContent=txt; }
-function scheduleSave(dayKey) { setSyncDot('syncing'); setSyncLabel('saving…'); clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveDay(dayKey),1000); }
+function scheduleSave(dayKey, isplan=false) {
+  setSyncDot('syncing'); setSyncLabel('saving…');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => saveDay(dayKey, isplan), 1000);
+}
 
 // ── DATA HELPERS ─────────────────────────────────────────────
 function dayKey(d) { return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function getDayData(d) { return data[dayKey(d)] || {}; }
-function hasData(d) {
-  const dd = getDayData(d);
-  return Object.values(dd).some(sets => sets.some(s => s.repsOrTime || s.weight || s.notes));
-}
+function getPlanData(d) { return planData[dayKey(d)] || {}; }
+function hasData(d) { const dd=getDayData(d); return Object.values(dd).some(sets=>sets.some(s=>s.repsOrTime||s.weight||s.notes)); }
+function hasPlan(d) { const dd=getPlanData(d); return Object.values(dd).some(sets=>sets.some(s=>s.repsOrTime||s.weight||s.notes)); }
+
+function getWeighted() { return exercises.filter(e=>e.type==='weighted').map(e=>e.name); }
+function getTimed() { return exercises.filter(e=>e.type==='timed').map(e=>e.name); }
 
 // ── VIEWS ────────────────────────────────────────────────────
 const today = new Date(); today.setHours(0,0,0,0);
@@ -431,6 +638,9 @@ function navNext() {
 }
 function render() { if(view==='month') renderMonth(); else if(view==='week') renderWeek(); else renderDayNav(); renderSummary(); }
 
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
 function renderMonth() {
   document.getElementById('nav-label').innerHTML=`${MONTHS[cursor.getMonth()]} <span>${cursor.getFullYear()}</span>`;
   const first=new Date(cursor.getFullYear(),cursor.getMonth(),1);
@@ -446,9 +656,15 @@ function renderMonth() {
 }
 
 function calCell(d,other) {
-  const dd=getDayData(d);
-  let dots=ALL_EX.map(ex=>{ const on=(dd[ex]||[]).some(s=>s.repsOrTime||s.weight); return `<div class="cal-dot ${on?'on':''}"></div>`; }).join('');
-  const cls=['cal-cell',other?'other-month':'',isToday(d)?'today':'',hasData(d)?'has-data':''].filter(Boolean).join(' ');
+  const dd=getDayData(d), pd=getPlanData(d);
+  const hd=hasData(d), hp=hasPlan(d);
+  let dots=exercises.map(ex=>{
+    const logged=(dd[ex.name]||[]).some(s=>s.repsOrTime||s.weight);
+    const planned=(pd[ex.name]||[]).some(s=>s.repsOrTime||s.weight||s.notes);
+    const cls=logged?'on':planned?'planned':'';
+    return `<div class="cal-dot ${cls}"></div>`;
+  }).join('');
+  const cls=['cal-cell',other?'other-month':'',isToday(d)?'today':'',hd?'has-data':hp?'has-plan':''].filter(Boolean).join(' ');
   return `<div class="${cls}" onclick="openDayModal(new Date(${d.getTime()}))"><div class="cal-dn">${d.getDate()}</div><div class="cal-dots">${dots}</div></div>`;
 }
 
@@ -459,10 +675,14 @@ function renderWeek() {
   document.getElementById('nav-label').innerHTML=`${ml} ${ws.getDate()}${sfx} <span>${we.getFullYear()}</span>`;
   let html='<div class="week-rows">';
   for(let i=0;i<7;i++){
-    const d=new Date(ws.getTime()+i*86400000), isTod=isToday(d), dd=getDayData(d);
-    const done=ALL_EX.filter(ex=>(dd[ex]||[]).some(s=>s.repsOrTime||s.weight));
-    const label=done.length?done.slice(0,5).join(', ')+(done.length>5?'…':''):'— tap to log';
-    html+=`<div class="week-row"><div class="week-label ${isTod?'today':''}"><div class="wd">${DOW[d.getDay()]}</div><div class="wdate">${d.getDate()}</div></div><div class="week-cell ${isTod?'today-cell':''}" onclick="openDayModal(new Date(${d.getTime()}))"><div class="week-cell-content ${done.length?'has':''}">${label}</div></div></div>`;
+    const d=new Date(ws.getTime()+i*86400000), isTod=isToday(d);
+    const dd=getDayData(d), pd=getPlanData(d);
+    const done=exercises.filter(ex=>(dd[ex.name]||[]).some(s=>s.repsOrTime||s.weight));
+    const planned=exercises.filter(ex=>(pd[ex.name]||[]).some(s=>s.repsOrTime||s.weight||s.notes));
+    let label='— tap to log', cls='';
+    if(done.length){ label=done.slice(0,4).map(e=>e.name).join(', ')+(done.length>4?'…':''); cls='has'; }
+    else if(planned.length){ label='📋 '+planned.slice(0,4).map(e=>e.name).join(', ')+(planned.length>4?'…':''); cls='planned'; }
+    html+=`<div class="week-row"><div class="week-label ${isTod?'today':''}"><div class="wd">${DOW[d.getDay()]}</div><div class="wdate">${d.getDate()}</div></div><div class="week-cell ${isTod?'today-cell':''} ${planned.length&&!done.length?'planned-cell':''}" onclick="openDayModal(new Date(${d.getTime()}))"><div class="week-cell-content ${cls}">${label}</div></div></div>`;
   }
   html+='</div>';
   document.getElementById('main-view').innerHTML=html;
@@ -474,149 +694,490 @@ function renderDayNav() {
 }
 
 // ── MODAL ────────────────────────────────────────────────────
-let currentModalKey = null;
+let currentModalTab = 'log'; // 'log' or 'plan'
 
 function openDayModal(d) {
   currentModalKey = dayKey(d);
+  currentModalTab = 'log';
   if (!data[currentModalKey]) data[currentModalKey] = {};
-  // Ensure at least 1 set per exercise
-  ALL_EX.forEach(ex => {
-    if (!data[currentModalKey][ex] || data[currentModalKey][ex].length === 0) {
-      data[currentModalKey][ex] = [{ repsOrTime: '', weight: '', notes: '' }];
-    }
+  if (!planData[currentModalKey]) planData[currentModalKey] = {};
+  exercises.forEach(ex => {
+    if (!data[currentModalKey][ex.name] || data[currentModalKey][ex.name].length === 0)
+      data[currentModalKey][ex.name] = [{ repsOrTime:'', weight:'', notes:'' }];
+    if (!planData[currentModalKey][ex.name] || planData[currentModalKey][ex.name].length === 0)
+      planData[currentModalKey][ex.name] = [{ repsOrTime:'', weight:'', notes:'' }];
   });
   renderModal(d);
   document.getElementById('modal-overlay').classList.add('open');
 }
 
+function switchModalTab(tab) {
+  currentModalTab = tab;
+  const ts = document.getElementById('modal-content').dataset.ts;
+  renderModal(new Date(parseInt(ts)));
+}
+
 function renderModal(d) {
   const k = currentModalKey;
-  const dd = data[k];
-  let html = `<div class="modal-header"><div class="modal-date">${DOW[d.getDay()]} / ${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()} / ${d.getFullYear()}</div><button class="modal-close" onclick="closeModal()">&#x2715;</button></div>`;
+  const isplan = currentModalTab === 'plan';
+  const store = isplan ? planData : data;
+  const dd = store[k] || {};
+  const hp = hasPlan(d);
 
-  WEIGHTED.forEach((ex, ei) => {
-    html += `<div class="ex-block"><div class="ex-block-name">${ex}</div><div class="sets-table" id="sets-${k}-${ex.replace(/\s/g,'_')}">`;
-    (dd[ex] || []).forEach((s, idx) => {
-      html += buildWeightedSetRow(k, ex, idx, s);
-    });
-    html += `</div><button class="add-set-btn" onclick="addSet('${k}','${ex}',false)">+ add set</button></div>`;
-    if (ei < WEIGHTED.length - 1) html += '<div class="divider"></div>';
+  let html = `<div class="modal-header">
+    <div class="modal-date ${isplan?'planned-date':''}">${DOW[d.getDay()]} / ${MONTHS[d.getMonth()].slice(0,3)} ${d.getDate()} / ${d.getFullYear()}</div>
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+  </div>
+  <div class="modal-tabs">
+    <button class="modal-tab ${!isplan?'active':''}" onclick="switchModalTab('log')">Log session</button>
+    <button class="modal-tab planned-tab ${isplan?'active':''}" onclick="switchModalTab('plan')">📋 Planned${hp?' ●':''}</button>
+  </div>`;
+
+  const weighted = getWeighted();
+  const timed = getTimed();
+
+  weighted.forEach((ex, ei) => {
+    html += `<div class="ex-block"><div class="ex-block-name ${isplan?'planned-ex':''}">${ex}</div><div class="sets-table" id="sets-${k}-${ex.replace(/\s/g,'_')}">`;
+    (dd[ex] || []).forEach((s, idx) => { html += buildWeightedRow(k, ex, idx, s, isplan); });
+    html += `</div><button class="add-set-btn" onclick="addSet('${k}','${ex}',false,${isplan})">+ add set</button></div>`;
+    if (ei < weighted.length - 1) html += '<div class="divider"></div>';
   });
 
-  html += '<div class="divider"></div>';
+  if (timed.length) html += '<div class="divider"></div>';
 
-  TIMED.forEach((ex, ei) => {
-    html += `<div class="ex-block"><div class="ex-block-name">${ex}</div><div class="sets-table" id="sets-${k}-${ex.replace(/\s/g,'_')}">`;
-    (dd[ex] || []).forEach((s, idx) => {
-      html += buildTimedSetRow(k, ex, idx, s);
-    });
-    html += `</div><button class="add-set-btn" onclick="addSet('${k}','${ex}',true)">+ add set</button></div>`;
-    if (ei < TIMED.length - 1) html += '<div class="divider"></div>';
+  timed.forEach((ex, ei) => {
+    html += `<div class="ex-block"><div class="ex-block-name ${isplan?'planned-ex':''}">${ex}</div><div class="sets-table" id="sets-${k}-${ex.replace(/\s/g,'_')}">`;
+    (dd[ex] || []).forEach((s, idx) => { html += buildTimedRow(k, ex, idx, s, isplan); });
+    html += `</div><button class="add-set-btn" onclick="addSet('${k}','${ex}',true,${isplan})">+ add set</button></div>`;
+    if (ei < timed.length - 1) html += '<div class="divider"></div>';
   });
 
-  html += '<button class="modal-done" onclick="closeModal()">Save &amp; close</button>';
+  html += `<button class="modal-done" onclick="closeModal()">Save &amp; close</button>`;
+  if (isplan) html += `<button class="modal-clear" onclick="clearPlan('${k}')">Clear planned session</button>`;
+
   document.getElementById('modal-content').innerHTML = html;
-  // Store d for re-render
   document.getElementById('modal-content').dataset.ts = d.getTime();
 }
 
-function buildWeightedSetRow(k, ex, idx, s) {
+function buildWeightedRow(k, ex, idx, s, isplan) {
   const exId = ex.replace(/\s/g,'_');
   return `<div class="set-row" id="setrow-${k}-${exId}-${idx}">
     <div class="set-row-top">
       <span class="set-label">set ${idx+1}</span>
       <input class="set-input" type="number" min="0" placeholder="reps" value="${s.repsOrTime||''}"
-        oninput="updateSet('${k}','${ex}',${idx},'repsOrTime',this.value)">
+        oninput="updateSet('${k}','${ex}',${idx},'repsOrTime',this.value,${isplan})">
       <input class="set-input" type="number" min="0" step="0.5" placeholder="kg" value="${s.weight||''}"
-        oninput="updateSet('${k}','${ex}',${idx},'weight',this.value)">
+        oninput="updateSet('${k}','${ex}',${idx},'weight',this.value,${isplan})">
       <span class="set-unit">reps / kg</span>
-      <button class="set-remove" onclick="removeSet('${k}','${ex}',${idx})" title="Remove set">&#x2212;</button>
+      <button class="set-remove" onclick="removeSet('${k}','${ex}',${idx},${isplan})">&#x2212;</button>
     </div>
-    <textarea class="set-notes" rows="1" placeholder="Notes — how did it feel? e.g. easy, left knee tight, PB..."
-      oninput="updateSet('${k}','${ex}',${idx},'notes',this.value)">${s.notes||''}</textarea>
+    <textarea class="set-notes" rows="1" placeholder="Notes — how did it feel?"
+      oninput="updateSet('${k}','${ex}',${idx},'notes',this.value,${isplan})">${s.notes||''}</textarea>
   </div>`;
 }
 
-function buildTimedSetRow(k, ex, idx, s) {
+function buildTimedRow(k, ex, idx, s, isplan) {
   const exId = ex.replace(/\s/g,'_');
   return `<div class="set-row" id="setrow-${k}-${exId}-${idx}">
     <div class="set-row-top">
       <span class="set-label">set ${idx+1}</span>
       <input class="set-input" type="number" min="0" placeholder="sec" value="${s.repsOrTime||''}"
-        oninput="updateSet('${k}','${ex}',${idx},'repsOrTime',this.value)">
+        oninput="updateSet('${k}','${ex}',${idx},'repsOrTime',this.value,${isplan})">
       <span class="set-unit">seconds</span>
-      <button class="set-remove" onclick="removeSet('${k}','${ex}',${idx})" title="Remove set">&#x2212;</button>
+      <button class="set-remove" onclick="removeSet('${k}','${ex}',${idx},${isplan})">&#x2212;</button>
     </div>
     <textarea class="set-notes" rows="1" placeholder="Notes — how did it feel?"
-      oninput="updateSet('${k}','${ex}',${idx},'notes',this.value)">${s.notes||''}</textarea>
+      oninput="updateSet('${k}','${ex}',${idx},'notes',this.value,${isplan})">${s.notes||''}</textarea>
   </div>`;
 }
 
-function updateSet(dayKey, ex, idx, field, value) {
-  if (!data[dayKey]) data[dayKey] = {};
-  if (!data[dayKey][ex]) data[dayKey][ex] = [];
-  while (data[dayKey][ex].length <= idx) data[dayKey][ex].push({ repsOrTime:'', weight:'', notes:'' });
-  data[dayKey][ex][idx][field] = value;
-  scheduleSave(dayKey);
+function updateSet(dayKey, ex, idx, field, value, isplan) {
+  const store = isplan ? planData : data;
+  if (!store[dayKey]) store[dayKey] = {};
+  if (!store[dayKey][ex]) store[dayKey][ex] = [];
+  while (store[dayKey][ex].length <= idx) store[dayKey][ex].push({ repsOrTime:'', weight:'', notes:'' });
+  store[dayKey][ex][idx][field] = value;
+  scheduleSave(dayKey, isplan);
 }
 
-function addSet(dayKey, ex, isTimed) {
-  if (!data[dayKey]) data[dayKey] = {};
-  if (!data[dayKey][ex]) data[dayKey][ex] = [];
-  data[dayKey][ex].push({ repsOrTime: '', weight: '', notes: '' });
-  const idx = data[dayKey][ex].length - 1;
+function addSet(dayKey, ex, isTimed, isplan) {
+  const store = isplan ? planData : data;
+  if (!store[dayKey]) store[dayKey] = {};
+  if (!store[dayKey][ex]) store[dayKey][ex] = [];
+  store[dayKey][ex].push({ repsOrTime:'', weight:'', notes:'' });
+  const idx = store[dayKey][ex].length - 1;
   const exId = ex.replace(/\s/g,'_');
   const container = document.getElementById(`sets-${dayKey}-${exId}`);
   if (container) {
-    const newRow = document.createElement('div');
-    newRow.innerHTML = isTimed ? buildTimedSetRow(dayKey, ex, idx, {}) : buildWeightedSetRow(dayKey, ex, idx, {});
-    container.appendChild(newRow.firstElementChild);
+    const div = document.createElement('div');
+    div.innerHTML = isTimed ? buildTimedRow(dayKey, ex, idx, {}, isplan) : buildWeightedRow(dayKey, ex, idx, {}, isplan);
+    container.appendChild(div.firstElementChild);
   }
-  scheduleSave(dayKey);
+  scheduleSave(dayKey, isplan);
 }
 
-function removeSet(dayKey, ex, idx) {
-  if (!data[dayKey] || !data[dayKey][ex]) return;
-  if (data[dayKey][ex].length <= 1) { showToast('Need at least 1 set'); return; }
-  data[dayKey][ex].splice(idx, 1);
-  // Re-render modal
+function removeSet(dayKey, ex, idx, isplan) {
+  const store = isplan ? planData : data;
+  if (!store[dayKey] || !store[dayKey][ex]) return;
+  if (store[dayKey][ex].length <= 1) { showToast('Need at least 1 set'); return; }
+  store[dayKey][ex].splice(idx, 1);
   const ts = document.getElementById('modal-content').dataset.ts;
   renderModal(new Date(parseInt(ts)));
-  scheduleSave(dayKey);
+  scheduleSave(dayKey, isplan);
+}
+
+function clearPlan(dayKey) {
+  if (!confirm('Clear the planned session for this day?')) return;
+  planData[dayKey] = {};
+  exercises.forEach(ex => { planData[dayKey][ex.name] = [{ repsOrTime:'', weight:'', notes:'' }]; });
+  saveDay(dayKey, true);
+  const ts = document.getElementById('modal-content').dataset.ts;
+  renderModal(new Date(parseInt(ts)));
+  render();
+  showToast('Planned session cleared');
 }
 
 function overlayClick(e) { if(e.target===document.getElementById('modal-overlay')) closeModal(); }
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); currentModalKey=null; render(); }
+
+// ── SETTINGS ─────────────────────────────────────────────────
+function openSettings() {
+  renderSettings();
+  document.getElementById('settings-overlay').classList.add('open');
+}
+
+function renderSettings() {
+  let html = `<div class="settings-title">Manage Exercises <button class="modal-close" onclick="closeSettings()">&#x2715;</button></div>`;
+  html += '<div class="ex-manage-list">';
+  exercises.forEach((ex, i) => {
+    const isDefault = [...DEFAULT_WEIGHTED, ...DEFAULT_TIMED].includes(ex.name);
+    html += `<div class="ex-manage-row">
+      <span class="ex-manage-name">${ex.name}</span>
+      <span class="ex-manage-type">${ex.type}</span>
+      <button class="ex-manage-del" onclick="deleteExercise(${i})" ${isDefault?'disabled title="Default exercise"':''}>&#x2715;</button>
+    </div>`;
+  });
+  html += '</div>';
+  html += `<div class="add-ex-row">
+    <input class="add-ex-input" id="new-ex-name" placeholder="New exercise name" />
+    <select class="add-ex-select" id="new-ex-type">
+      <option value="weighted">Weighted</option>
+      <option value="timed">Timed</option>
+    </select>
+    <button class="add-ex-btn" onclick="addExercise()">Add</button>
+  </div>`;
+  document.getElementById('settings-content').innerHTML = html;
+}
+
+async function addExercise() {
+  const name = document.getElementById('new-ex-name').value.trim();
+  const type = document.getElementById('new-ex-type').value;
+  if (!name) { showToast('Enter an exercise name'); return; }
+  if (exercises.find(e => e.name.toLowerCase() === name.toLowerCase())) { showToast('Exercise already exists'); return; }
+  exercises.push({ name, type });
+  await saveExercises();
+  renderSettings();
+  showToast(`${name} added!`);
+}
+
+async function deleteExercise(idx) {
+  const ex = exercises[idx];
+  if (!confirm(`Delete "${ex.name}"? This won't remove historical data.`)) return;
+  exercises.splice(idx, 1);
+  await saveExercises();
+  renderSettings();
+  showToast(`${ex.name} removed`);
+}
+
+function settingsOverlayClick(e) { if(e.target===document.getElementById('settings-overlay')) closeSettings(); }
+function closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); render(); }
 
 // ── SUMMARY ──────────────────────────────────────────────────
 function weekStart(d){ const ws=new Date(d); ws.setDate(ws.getDate()-ws.getDay()); ws.setHours(0,0,0,0); return ws; }
 function weekDays(d){ const ws=weekStart(d); return Array.from({length:7},(_,i)=>new Date(ws.getTime()+i*86400000)); }
 
 function renderSummary(){
-  document.getElementById('ex-pills').innerHTML=ALL_EX.map(ex=>`<button class="ex-pill ${ex===summaryEx?'active':''}" onclick="setSummaryEx('${ex}')">${ex}</button>`).join('');
+  document.getElementById('ex-pills').innerHTML=exercises.map(ex=>`<button class="ex-pill ${ex.name===summaryEx?'active':''}" onclick="setSummaryEx('${ex.name}')">${ex.name}</button>`).join('');
   const days=weekDays(view==='month'?today:cursor);
-  const ex=summaryEx, isTimed=TIMED.includes(ex);
+  const ex=summaryEx;
+  const exObj=exercises.find(e=>e.name===ex);
+  const isTimed=exObj&&exObj.type==='timed';
   let cards='';
   if(!isTimed){
     let totalReps=0,totalVol=0,bestW=0;
-    days.forEach(d=>{
-      const sets=(getDayData(d)[ex]||[]);
-      sets.forEach(s=>{ const r=parseFloat(s.repsOrTime)||0, w=parseFloat(s.weight)||0; totalReps+=r; totalVol+=r*w; if(w>bestW) bestW=w; });
-    });
+    days.forEach(d=>{ const sets=(getDayData(d)[ex]||[]); sets.forEach(s=>{ const r=parseFloat(s.repsOrTime)||0,w=parseFloat(s.weight)||0; totalReps+=r; totalVol+=r*w; if(w>bestW) bestW=w; }); });
     cards+=sCard('Total reps',totalReps,'this week')+sCard('Volume',Math.round(totalVol),'kg this week')+sCard('Best weight',bestW,'kg lifted');
   } else {
     let totalTime=0,bestSet=0,totalSets=0;
-    days.forEach(d=>{
-      const sets=(getDayData(d)[ex]||[]);
-      sets.forEach(s=>{ const t=parseFloat(s.repsOrTime)||0; if(t>0){totalTime+=t;totalSets++;if(t>bestSet)bestSet=t;} });
-    });
+    days.forEach(d=>{ const sets=(getDayData(d)[ex]||[]); sets.forEach(s=>{ const t=parseFloat(s.repsOrTime)||0; if(t>0){totalTime+=t;totalSets++;if(t>bestSet)bestSet=t;} }); });
     cards+=sCard('Total time',totalTime,'sec this week')+sCard('Best set',bestSet,'seconds')+sCard('Sets logged',totalSets,'this week');
   }
   document.getElementById('stat-cards').innerHTML=cards;
 }
-
 function sCard(l,v,u){ return `<div class="stat-card"><div class="stat-card-label">${l}</div><div class="stat-card-val">${v}</div><div class="stat-card-unit">${u}</div></div>`; }
 function setSummaryEx(ex){ summaryEx=ex; renderSummary(); }
+
+// ── AI COACH PANEL ────────────────────────────────────────────
+function initAIPanel() {
+  const savedKey = localStorage.getItem(API_KEY_STORAGE);
+  if (savedKey) {
+    document.getElementById('ai-key-input').value = savedKey;
+    document.getElementById('ai-key-row').style.display = 'none';
+    const instructions = document.getElementById('ai-key-instructions');
+    if (instructions) instructions.style.display = 'none';
+  }
+}
+
+function saveApiKey() {
+  const key = document.getElementById('ai-key-input').value.trim();
+  if (!key) { showToast('Enter your Anthropic API key'); return; }
+  localStorage.setItem(API_KEY_STORAGE, key);
+  document.getElementById('ai-key-row').style.display = 'none';
+  const instructions = document.getElementById('ai-key-instructions');
+  if (instructions) instructions.style.display = 'none';
+  showToast('API key saved! Coach is ready.');
+}
+
+function toggleAIPanel() {
+  aiPanelOpen = !aiPanelOpen;
+  document.getElementById('ai-panel').classList.toggle('collapsed', !aiPanelOpen);
+  document.getElementById('ai-toggle-btn').classList.toggle('active', aiPanelOpen);
+}
+
+function buildDataContext() {
+  // Build a compact summary of all logged data for the AI context
+  const lines = [];
+  const allDays = Object.keys(data).sort();
+  allDays.forEach(dk => {
+    const dd = data[dk];
+    const exLines = [];
+    Object.entries(dd).forEach(([ex, sets]) => {
+      const exObj = exercises.find(e=>e.name===ex);
+      const isTimed = exObj&&exObj.type==='timed';
+      sets.forEach((s, i) => {
+        if (!s.repsOrTime && !s.weight && !s.notes) return;
+        let line = `  ${ex} set${i+1}: `;
+        if (isTimed) line += `${s.repsOrTime||'?'}sec`;
+        else line += `${s.repsOrTime||'?'}reps ${s.weight||'?'}kg`;
+        if (s.notes) line += ` [note: ${s.notes}]`;
+        exLines.push(line);
+      });
+    });
+    if (exLines.length) lines.push(`${dk}:\n${exLines.join('\n')}`);
+  });
+
+  // Also include planned sessions
+  const planDays = Object.keys(planData).sort();
+  const planLines = [];
+  planDays.forEach(dk => {
+    const dd = planData[dk];
+    const exLines = [];
+    Object.entries(dd).forEach(([ex, sets]) => {
+      const exObj = exercises.find(e=>e.name===ex);
+      const isTimed = exObj&&exObj.type==='timed';
+      sets.forEach((s, i) => {
+        if (!s.repsOrTime && !s.weight && !s.notes) return;
+        let line = `  ${ex} set${i+1}: `;
+        if (isTimed) line += `${s.repsOrTime||'?'}sec`;
+        else line += `${s.repsOrTime||'?'}reps ${s.weight||'?'}kg`;
+        if (s.notes) line += ` [note: ${s.notes}]`;
+        exLines.push(line);
+      });
+    });
+    if (exLines.length) planLines.push(`${dk} (PLANNED):\n${exLines.join('\n')}`);
+  });
+
+  return `LOGGED TRAINING DATA:\n${lines.join('\n\n') || 'No data yet.'}\n\nPLANNED SESSIONS:\n${planLines.join('\n\n') || 'None planned yet.'}`;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('ai-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const apiKey = localStorage.getItem(API_KEY_STORAGE);
+  if (!apiKey) {
+    document.getElementById('ai-key-row').style.display = 'flex';
+    showToast('Please enter your Anthropic API key first');
+    return;
+  }
+
+  // Check if user is confirming a pending plan
+  if (pendingPlan && (msg.toLowerCase().includes('confirm') || msg.toLowerCase().includes('yes') || msg.toLowerCase().includes('go ahead') || msg.toLowerCase().includes('looks good'))) {
+    input.value = '';
+    appendMessage('user', msg);
+    await commitPlan(pendingPlan);
+    return;
+  }
+
+  input.value = '';
+  appendMessage('user', msg);
+  document.getElementById('ai-send-btn').disabled = true;
+  appendMessage('assistant', 'thinking...', 'thinking');
+
+  chatHistory.push({ role: 'user', content: msg });
+
+  const systemPrompt = `You are a personal fitness coach AI assistant built into a training tracker app.
+
+${USER_PROFILE}
+
+${buildDataContext()}
+
+You have full access to Jim's training history above. Be specific, reference actual data when relevant, and give personalised advice based on his history and notes.
+
+When Jim asks you to plan future sessions, create a structured plan. Format planned sessions EXACTLY like this so the app can parse them:
+
+PLAN:
+DATE: YYYY-M-D
+EXERCISE: Exercise Name
+SET 1: Xreps Ykg
+SET 2: Xreps Ykg
+(for timed: SET 1: Xsec)
+NOTES: any notes for this session
+---
+DATE: YYYY-M-D
+(next day...)
+END PLAN
+
+After showing the plan, ask Jim to say "confirm" to add it to his calendar.
+
+Important: only output the PLAN block if you're proposing a specific plan to be added to the calendar. For general advice, just respond normally.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        system: systemPrompt,
+        messages: chatHistory
+      })
+    });
+
+    const result = await response.json();
+    if (result.error) throw new Error(result.error.message);
+
+    const reply = result.content[0].text;
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    // Remove thinking message
+    const msgs = document.getElementById('ai-messages');
+    const thinking = msgs.querySelector('.thinking');
+    if (thinking) thinking.closest('.ai-msg').remove();
+
+    // Check if reply contains a plan
+    if (reply.includes('PLAN:') && reply.includes('END PLAN')) {
+      pendingPlan = parsePlan(reply);
+      appendMessageWithConfirm(reply);
+    } else {
+      pendingPlan = null;
+      appendMessage('assistant', reply);
+    }
+  } catch(e) {
+    const msgs = document.getElementById('ai-messages');
+    const thinking = msgs.querySelector('.thinking');
+    if (thinking) thinking.closest('.ai-msg').remove();
+    appendMessage('assistant', `Error: ${e.message}. Check your API key in the input below.`);
+  }
+
+  document.getElementById('ai-send-btn').disabled = false;
+  const msgs = document.getElementById('ai-messages');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function appendMessage(role, text, extraClass='') {
+  const msgs = document.getElementById('ai-messages');
+  const div = document.createElement('div');
+  div.className = `ai-msg ${role}`;
+  div.innerHTML = `<div class="ai-msg-role">${role==='user'?'you':'coach'}</div><div class="ai-msg-text ${extraClass}">${text.replace(/\n/g,'<br>')}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function appendMessageWithConfirm(text) {
+  const msgs = document.getElementById('ai-messages');
+  const div = document.createElement('div');
+  div.className = 'ai-msg assistant';
+  div.innerHTML = `<div class="ai-msg-role">coach</div><div class="ai-msg-text">${text.replace(/\n/g,'<br>')}</div><button class="ai-confirm-btn" onclick="confirmPlanClick()">✓ Confirm — add to calendar</button>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function confirmPlanClick() {
+  if (pendingPlan) {
+    commitPlan(pendingPlan);
+  }
+}
+
+function parsePlan(text) {
+  const plan = [];
+  const planText = text.match(/PLAN:([\s\S]*?)END PLAN/)?.[1] || '';
+  const dayBlocks = planText.split('---').filter(b=>b.trim());
+
+  dayBlocks.forEach(block => {
+    const dateMatch = block.match(/DATE:\s*(\S+)/);
+    if (!dateMatch) return;
+    const dateKey = dateMatch[1].trim();
+    const session = { dateKey, exercises: {} };
+
+    const exMatches = [...block.matchAll(/EXERCISE:\s*(.+)/g)];
+    exMatches.forEach(exMatch => {
+      const exName = exMatch[1].trim();
+      const exIdx = block.indexOf(exMatch[0]);
+      // Find sets after this exercise line
+      const afterEx = block.slice(exIdx + exMatch[0].length);
+      const nextEx = afterEx.search(/EXERCISE:|NOTES:|DATE:/);
+      const exBlock = nextEx > -1 ? afterEx.slice(0, nextEx) : afterEx;
+      const sets = [];
+      const setMatches = [...exBlock.matchAll(/SET\s*(\d+):\s*(.+)/gi)];
+      setMatches.forEach(sm => {
+        const setData = sm[2].trim();
+        const repsMatch = setData.match(/(\d+)\s*reps?/i);
+        const kgMatch = setData.match(/(\d+(?:\.\d+)?)\s*kg/i);
+        const secMatch = setData.match(/(\d+)\s*sec/i);
+        sets.push({
+          repsOrTime: repsMatch?.[1] || secMatch?.[1] || '',
+          weight: kgMatch?.[1] || '',
+          notes: ''
+        });
+      });
+      const notesMatch = exBlock.match(/NOTES:\s*(.+)/i);
+      if (notesMatch && sets.length > 0) sets[sets.length-1].notes = notesMatch[1].trim();
+      if (sets.length) session.exercises[exName] = sets;
+    });
+
+    plan.push(session);
+  });
+  return plan;
+}
+
+async function commitPlan(plan) {
+  appendMessage('assistant', 'Adding sessions to your calendar...');
+  for (const session of plan) {
+    if (!planData[session.dateKey]) planData[session.dateKey] = {};
+    Object.entries(session.exercises).forEach(([ex, sets]) => {
+      planData[session.dateKey][ex] = sets;
+    });
+    await saveDay(session.dateKey, true);
+  }
+  pendingPlan = null;
+  render();
+  appendMessage('assistant', `Done! I've added ${plan.length} session${plan.length>1?'s':''} to your calendar. You'll see them as blue indicators on the calendar. Open any planned day to see the details.`);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key==='Enter' && !e.shiftKey && document.activeElement===document.getElementById('ai-input')) {
+    e.preventDefault(); sendMessage();
+  }
+});
+
+// ── TOAST / LOADING ───────────────────────────────────────────
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
 window.addEventListener('load', () => {
