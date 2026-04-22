@@ -421,7 +421,7 @@
 <script>
 // ── CONFIG ───────────────────────────────────────────────────
 const CLIENT_ID = '688992356709-l1qkvk7tohg4ibs001cec1g0ddll3dl6.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file';
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly';
 const SHEET_ID_KEY = 'exercise_sheet_id';
 const DATA_SHEET = 'Sessions';
 const EX_SHEET = 'Exercises';
@@ -483,12 +483,31 @@ function signIn() {
 }
 
 async function afterSignIn() {
-  if (sheetId) {
-    showScreen('loading');
+  showScreen('loading');
+  // Always search Drive for existing sheet first
+  const found = await findExistingSheet();
+  if (found) {
     const ok = await loadAll();
-    if (ok) { showScreen('app'); render(); initAIPanel(); }
-    else { sheetId = null; localStorage.removeItem(SHEET_ID_KEY); showScreen('setup'); }
-  } else { showScreen('setup'); }
+    if (ok) { showScreen('app'); render(); initAIPanel(); return; }
+  }
+  // Not found — create automatically
+  await createNewSheet();
+}
+
+async function findExistingSheet() {
+  try {
+    const res = await fetch(
+      `https://www.googleapis.com/drive/v3/files?q=name%3D%22Jim%27s+Exercise+Tracker%22+and+mimeType%3D%22application%2Fvnd.google-apps.spreadsheet%22+and+trashed%3Dfalse&fields=files(id,name)`,
+      { headers: { 'Authorization': `Bearer ${accessToken}` } }
+    );
+    const data = await res.json();
+    if (data.files && data.files.length > 0) {
+      sheetId = data.files[0].id;
+      localStorage.setItem(SHEET_ID_KEY, sheetId);
+      return true;
+    }
+    return false;
+  } catch(e) { return false; }
 }
 
 function signOut() {
@@ -499,7 +518,6 @@ function signOut() {
 
 // ── SHEET SETUP ──────────────────────────────────────────────
 async function createNewSheet() {
-  showScreen('loading');
   try {
     const res = await gapi('https://sheets.googleapis.com/v4/spreadsheets', 'POST', {
       properties: { title: "Jim's Exercise Tracker" },
@@ -515,8 +533,8 @@ async function createNewSheet() {
     await saveExercises();
     data = {};
     showScreen('app'); render(); initAIPanel();
-    showToast('Sheet created in your Google Drive!');
-  } catch(e) { console.error(e); showToast('Could not create sheet'); showScreen('setup'); }
+    showToast('New sheet created in your Google Drive!');
+  } catch(e) { console.error(e); showToast('Could not create sheet — please refresh and try again'); showScreen('gate'); }
 }
 
 async function useExistingSheet() {
