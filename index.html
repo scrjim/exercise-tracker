@@ -1050,7 +1050,8 @@ function buildDataContext() {
       });
     });
     if (exLines.length) {
-      const d = new Date(dk.split('-').map((v,i)=>i===1?v-1:v).reduce((a,v,i)=>i===0?new Date(v,0,1):new Date(a.getFullYear(),i===1?v:a.getMonth(),i===2?v:a.getDate())));
+      const parts = dk.split('-');
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
       const label = dk + (d < today ? ' [logged]' : d > today ? ' [planned]' : ' [today]');
       let entry = `${label}:\n${exLines.join('\n')}`;
       if (dd.notes) entry += `\n  notes: ${dd.notes}`;
